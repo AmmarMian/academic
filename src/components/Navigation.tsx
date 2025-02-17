@@ -106,48 +106,48 @@ export default function NavigationMain() {
                           <a href="/students/">Students</a>
                         </NavigationMenuLink>
                       </NavigationMenuItem>
-                      {/* <NavigationMenuItem> */}
-                      {/*   <NavigationMenuLink */}
-                      {/*     className={navigationMenuTriggerStyle()} */}
-                      {/*     asChild */}
-                      {/*   > */}
-                      {/*     <a href="/projects/">Projects</a> */}
-                      {/*   </NavigationMenuLink> */}
-                      {/* </NavigationMenuItem> */}
+                      <NavigationMenuItem>
+                        <NavigationMenuLink
+                          className={navigationMenuTriggerStyle()}
+                          asChild
+                        >
+                          <a href="/projects/">Projects</a>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
                     </NavigationMenuList>
                   </NavigationMenu>
                 </div>
               </NavigationMenuContent>
             </NavigationMenuItem>
-            {/* <NavigationMenuItem> */}
-            {/*   <NavigationMenuTrigger className="md:bg-transparent md:backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-sm"> */}
-            {/*     Teaching */}
-            {/*   </NavigationMenuTrigger> */}
-            {/*   <NavigationMenuContent> */}
-            {/*     <div className="min-w-[200px] p-3"> */}
-            {/*       <NavigationMenu> */}
-            {/*         <NavigationMenuList> */}
-            {/*           <NavigationMenuItem> */}
-            {/*             <NavigationMenuLink */}
-            {/*               className={navigationMenuTriggerStyle()} */}
-            {/*               asChild */}
-            {/*             > */}
-            {/*               <a href="/teaching/programming/">Computer Science</a> */}
-            {/*             </NavigationMenuLink> */}
-            {/*           </NavigationMenuItem> */}
-            {/*           <NavigationMenuItem> */}
-            {/*             <NavigationMenuLink */}
-            {/*               className={navigationMenuTriggerStyle()} */}
-            {/*               asChild */}
-            {/*             > */}
-            {/*               <a href="/teaching/machinelearning/">Machine Learning</a> */}
-            {/*             </NavigationMenuLink> */}
-            {/*           </NavigationMenuItem> */}
-            {/*         </NavigationMenuList> */}
-            {/*       </NavigationMenu> */}
-            {/*     </div> */}
-            {/*   </NavigationMenuContent> */}
-            {/* </NavigationMenuItem> */}
+            <NavigationMenuItem>
+              <NavigationMenuTrigger className="md:bg-transparent md:backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-sm">
+                Teaching
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <div className="min-w-[200px] p-3">
+                  <NavigationMenu>
+                    <NavigationMenuList>
+                      <NavigationMenuItem>
+                        <NavigationMenuLink
+                          className={navigationMenuTriggerStyle()}
+                          asChild
+                        >
+                          <a href="/teaching/programming/">Computer Science</a>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                      <NavigationMenuItem>
+                        <NavigationMenuLink
+                          className={navigationMenuTriggerStyle()}
+                          asChild
+                        >
+                          <a href="/teaching/machinelearning/">Machine Learning</a>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    </NavigationMenuList>
+                  </NavigationMenu>
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
       </div>
