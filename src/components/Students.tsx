@@ -23,27 +23,27 @@ const studentsData = [
   },
   { 
     name: "Douba Jafuno", startDate: "2022-06-01", funding: "CIFRE with Géolithe", type: "Ph.D", defended: "",
-    subject: "Geology", keywords: ["Data Analysis", "Geophysics"]
+    subject: "Classification of GPR signals with second-order network", keywords: ["Deep learning", "Second-order", "GPR"]
   },
   { 
     name: "Matthieu Verlynde", startDate: "2024-10-01", funding: "ED SIE", type: "Ph.D", defended: "",
-    subject: "Physics", keywords: ["Quantum Computing", "AI"]
+    subject: "Frugality of ML models in Remote Sensing", keywords: ["Frugal", "AI", "Remote Sensing"]
   },
   { 
     name: "Matthieu Gallet", startDate: "2021-02-01", funding: "Research Grant", type: "Master", defended: "2021-09-01",
-    subject: "Engineering", keywords: ["Mechanical Engineering", "Robotics"]
+    subject: "Robust Inversion of GPR signals", keywords: ["GPR", "Inverse methods"]
   },
   { 
     name: "Emma Molière", startDate: "2024-02-01", funding: "Research grant", type: "Master", defended: "2024-09-10",
-    subject: "Biology", keywords: ["Genetics", "Biochemistry"]
+    subject: "Unrolling Pansharpening Inverse methods", keywords: ["Inverse methods", "Unrolling", "Remote Sensing"]
   },
   { 
     name: "Matthieu Verlynde", startDate: "2024-02-12", funding: "Research Grant", type: "Master", defended: "2024-09-15",
-    subject: "Mathematics", keywords: ["Algebra", "Cryptography"]
+    subject: "Efficient implementation of Remote Sening algorithms", keywords: ["Energy measurement", "Remote Sensing"]
   },
   { 
     name: "Hugo Brehier", startDate: "2024-11-01", funding: "Research Grant", type: "Post-Doc", defended: "",
-    subject: "Chemistry", keywords: ["Organic Chemistry", "Catalysis"]
+    subject: "SPDnet and beyond", keywords: ["SPDnet", "Second-order", "Deep Learning"]
   },
 ];
 

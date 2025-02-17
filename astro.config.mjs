@@ -5,12 +5,16 @@ import react from '@astrojs/react';
 
 import tailwindcss from '@tailwindcss/vite';
 
+import vercel from '@astrojs/vercel';
+
 // https://astro.build/config
 export default defineConfig({
-  site: "https://ammarmian.github.io",
   integrations: [react()],
 
   vite: {
     plugins: [tailwindcss()]
-  }
+  },
+  output: "server",
+
+  adapter: vercel()
 });
