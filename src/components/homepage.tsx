@@ -120,7 +120,7 @@ export default function HomePage() {
       custom={4}
       initial="hidden"
       animate="visible"
-      className="md:col-start-3 lg:col-start-3 md:-mt-40 lg:-mt-40"
+      className="md:col-start-3 lg:col-start-3 md:-mt-37 lg:-mt-37"
     >
       <a href="/cv.pdf">
         <Card className="p-6 min-h-[100px] w-full bg-linear-to-r from-cyan-500 to-blue-500 flex place-content-center items-center transition-transform duration-300 transform hover:scale-105 peer ">
