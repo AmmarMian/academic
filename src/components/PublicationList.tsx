@@ -77,9 +77,8 @@ const HalPublicationsTable: React.FC = () => {
   useEffect(() => {
     const fetchPublications = async () => {
       try {
-        const response = await fetch(
-          "https://api.archives-ouvertes.fr/search/?q=ammar+mian&fl=uri_s,authFullName_s,title_s,docType_s,producedDate_s,journalTitle_s,conferenceTitle_s,label_bibtex&sort=producedDate_s%20desc&wt=json"
-        );
+        // Fetch from our new Astro API endpoint that uses caching
+        const response = await fetch("/api/publications.json");
         const data = await response.json();
 
         const formattedPublications: HalPublication[] = data.response.docs.map(
@@ -160,54 +159,56 @@ const HalPublicationsTable: React.FC = () => {
       ),
       filterFn: "includesString",
     },
- {
-    // New "Conference/Journal" column with sorting logic
-    id: "conference_or_journal",
-    accessorFn: (row) => row.conferenceTitle || row.journalTitle || "N/A", // Add this to ensure sorting works
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() =>
-          setSorting((old) => {
-            const current = old.find((s) => s.id === "conference_or_journal");
-            return current?.desc === false
-              ? [{ id: "conference_or_journal", desc: true }]
-              : [{ id: "conference_or_journal", desc: false }];
-          })
-        }
-      >
-        Conference/Journal <ArrowUpDown />
-      </Button>
-    ),
+    {
+      // New "Conference/Journal" column with sorting logic
+      id: "conference_or_journal",
+      accessorFn: (row) => row.conferenceTitle || row.journalTitle || "N/A", // Ensure sorting works
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() =>
+            setSorting((old) => {
+              const current = old.find((s) => s.id === "conference_or_journal");
+              return current?.desc === false
+                ? [{ id: "conference_or_journal", desc: true }]
+                : [{ id: "conference_or_journal", desc: false }];
+            })
+          }
+        >
+          Conference/Journal <ArrowUpDown />
+        </Button>
+      ),
       cell: ({ row }) => {
         const pub = row.original;
         const displayValue = pub.conferenceTitle || pub.journalTitle || "N/A";
-
         return <span>in {displayValue}</span>;
       },
     },
     {
       accessorKey: "authors",
       header: "Authors",
-        cell: ({ row }) => {
-          const authors = row.getValue("authors") as string[];
-          return (
-            <>
-              {authors
-                .map((author, index) =>
-                  author === "Ammar Mian" ? (
-                    <span key={index} style={{ fontWeight: "bold" }}>
-                      {author}
-                    </span>
-                  ) : (
-                    <span key={index}>{author}</span>
-                  )
+      cell: ({ row }) => {
+        const authors = row.getValue("authors") as string[];
+        return (
+          <>
+            {authors
+              .map((author, index) =>
+                author === "Ammar Mian" ? (
+                  <span key={index} style={{ fontWeight: "bold" }}>
+                    {author}
+                  </span>
+                ) : (
+                  <span key={index}>{author}</span>
                 )
-                .reduce((prev, curr, idx) => 
-                  idx === 0 ? [prev, curr] : [...prev, ", ", curr], [] as React.ReactNode[])}
-            </>
-          );
-        },
+              )
+              .reduce(
+                (prev, curr, idx) =>
+                  idx === 0 ? [prev, curr] : [...prev, ", ", curr],
+                [] as React.ReactNode[]
+              )}
+          </>
+        );
+      },
       filterFn: "includesString",
     },
     {
@@ -234,7 +235,7 @@ const HalPublicationsTable: React.FC = () => {
         const copyBibtex = async () => {
           try {
             await navigator.clipboard.writeText(bibtex);
-            // Optionally, you can show a toast/alert indicating success.
+            // Optionally, show a toast/alert indicating success.
             alert("BibTeX copied to clipboard!");
           } catch (err) {
             alert("Failed to copy BibTeX.");
@@ -249,9 +250,7 @@ const HalPublicationsTable: React.FC = () => {
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
                 <DialogTitle>Citation</DialogTitle>
-                <DialogDescription>
-                  {citation}
-                </DialogDescription>
+                <DialogDescription>{citation}</DialogDescription>
               </DialogHeader>
               <div className="my-4">
                 <label className="block mb-2 text-sm font-medium text-gray-700">
@@ -362,7 +361,10 @@ const HalPublicationsTable: React.FC = () => {
                   <TableHead key={header.id}>
                     {header.isPlaceholder
                       ? null
-                      : reactTable.flexRender(header.column.columnDef.header, header.getContext())}
+                      : reactTable.flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                   </TableHead>
                 ))}
               </TableRow>
@@ -374,7 +376,10 @@ const HalPublicationsTable: React.FC = () => {
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {reactTable.flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {reactTable.flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
