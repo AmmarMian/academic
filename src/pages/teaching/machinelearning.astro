@@ -1,0 +1,68 @@
+---
+import ContentLayout from "@/layouts/ContentLayout";
+import "@/styles/global.css";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout>
+  <div class="mt-10">
+    <ContentLayout client:load>
+      <section class="mb-10">
+        <h2 id="intro" class="text-xl scroll-mt-20">Introduction</h2>
+        <p>
+          Linear regression is a fundamental statistical method used to model the
+          relationship between a dependent variable and one or more independent
+          variables. It is widely applied in predictive modeling and data
+          analysis.
+        </p>
+      </section>
+
+      <section class="mb-10">
+        <h2 id="method" class="text-xl scroll-mt-20">Methodology</h2>
+        <p>
+          The simple linear regression model is expressed as:
+          <code>y = β0 + β1x + ε</code>, where:
+        </p>
+        <ul>
+          <li>y is the dependent variable</li>
+          <li>x is the independent variable</li>
+          <li>β0 is the intercept</li>
+          <li>β1 is the slope</li>
+          <li>ε is the error term</li>
+        </ul>
+      </section>
+
+      <section class="mb-10">
+        <h2 id="implementation" class="text-xl scroll-mt-20">Implementation</h2>
+        <h3 id="step1" class="scroll-mt-20">Step 1: Data Preparation</h3>
+        <p>Load necessary libraries and dataset.</p>
+        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error</code></pre>
+
+        <h3 id="step2" class="scroll-mt-20">Step 2: Model Training</h3>
+        <p>Train the linear regression model.</p>
+        <pre><code>X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model = LinearRegression()
+model.fit(X_train, y_train)</code></pre>
+
+        <h3 id="step3" class="scroll-mt-20">Step 3: Evaluation</h3>
+        <p>Evaluate model performance.</p>
+        <pre><code>y_pred = model.predict(X_test)
+mse = mean_squared_error(y_test, y_pred)
+print(f"Mean Squared Error: mse")</code></pre>
+      </section>
+
+      <section class="mb-10">
+        <h2 id="results" class="text-xl scroll-mt-20">Results</h2>
+        <p>
+          The trained model is evaluated using the test dataset, and the mean
+          squared error is calculated to assess prediction accuracy.
+        </p>
+      </section>
+    </ContentLayout>
+  </div>
+</Layout>
+
