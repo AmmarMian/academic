@@ -29,7 +29,7 @@ export default function HomePage() {
     >
       <Card className="p-6 flex items-center hover:drop-shadow-xl hover:dark:drop-shadow-[0_5px_10px_rgba(255,255,255,0.1)]">
         <CardContent className="flex items-center gap-4 place-content-center">
-          <img src="/images/profile.jpg" alt="Profile" className="w-20 h-20 rounded-full" />
+          <img src="/images/profile.jpg" alt="Profile" className="w-40 h-40 rounded-full" />
           <div>
             <h1 className="text-2xl font-bold">Ammar Mian</h1>
             <p className="text-gray-500">Associate Professor at Université Savoie Mont Blanc</p>
@@ -41,6 +41,7 @@ export default function HomePage() {
                 <School size={20} /> Scholar
               </a>
             </div>
+            <p className="mt-1"><b>Contact:</b> ammar.mian at univ-smb.fr</p>
           </div>
         </CardContent>
       </Card>
@@ -119,7 +120,22 @@ export default function HomePage() {
       custom={4}
       initial="hidden"
       animate="visible"
-      className="md:col-start-3 lg:col-start-3 md:-mt-20 lg:-mt-20"
+      className="md:col-start-3 lg:col-start-3 md:-mt-40 lg:-mt-40"
+    >
+      <a href="/cv.pdf">
+        <Card className="p-6 min-h-[100px] w-full bg-linear-to-r from-cyan-500 to-blue-500 flex place-content-center items-center transition-transform duration-300 transform hover:scale-105 peer ">
+                <h2 className="text-xl font-bold text-white justify-center">Curriculum Vitae</h2>
+        </Card>
+      </a>
+    </motion.div>
+
+
+    <motion.div
+      variants={cardVariants}
+      custom={5}
+      initial="hidden"
+      animate="visible"
+      className="md:col-start-3 lg:col-start-3 md:-mt-115 lg:-mt-115"
     >
       <a href="https://github.com/ammarmian/qanat">
         <Card className="p-6 min-h-[250px] w-full bg-[url(/images/qanat.png)] bg-cover transition-transform duration-300 transform hover:scale-105 peer ">
@@ -129,10 +145,10 @@ export default function HomePage() {
 
     <motion.div
       variants={cardVariants}
-      custom={4}
+      custom={6}
       initial="hidden"
       animate="visible"
-      className="md:col-start-3 lg:col-start-3 md:-mt-60 lg:-mt-55"
+      className="md:col-start-3 lg:col-start-3 md:-mt-52 lg:-mt-52"
     >
       <a href="https://github.com/ammarmian/anotherspdnet">
         <Card className="p-6 min-h-[100px] w-full bg-linear-to-r from-cyan-500 to-blue-500 flex place-content-center items-center transition-transform duration-300 transform hover:scale-105 peer ">

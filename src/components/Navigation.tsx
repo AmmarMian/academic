@@ -148,14 +148,6 @@ export default function NavigationMain() {
                 </div>
               </NavigationMenuContent>
             </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                className={`${navigationMenuTriggerStyle()} md:bg-transparent md:backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-sm`}
-                asChild
-              >
-                <a href="/contact">Contact</a>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
       </div>
