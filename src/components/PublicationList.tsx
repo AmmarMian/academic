@@ -31,7 +31,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Presentation, BookOpen } from "lucide-react";
 import { Badge } from "@/components/ui/badge"; // New import for Badge
 
 // Updated data model with bibtex field.
@@ -44,6 +43,7 @@ interface HalPublication {
   journalTitle?: string;
   conferenceTitle?: string;
   label_bibtex?: string;
+  citationFull?: string;
 }
 
 // Helper function to format a publication in APA style.
@@ -64,6 +64,17 @@ function formatCitation(pub: HalPublication): string {
   return `${authors} (${pub.year}). ${pub.title}. ${source}.`;
 }
 
+function cleanHALFullCitation(input: string) {
+  let match = input.match(/<a [^>]*href=["']([^"']+)["'][^>]*>.*?<\/a>/i);
+  let firstLink = match ? match[1] : ""; // Extract first link
+  
+  let cleaned = input.replace(/<i>(.*?)<\/i>/gi, '$1'); // Remove <i> tags
+  cleaned = cleaned.replace(/<a [^>]*href=["'][^"']+["'][^>]*>.*?<\/a>/gi, ''); // Remove all <a> tags
+  cleaned = cleaned.replace(/\s+/g, ' ').trim(); // Normalize spaces
+  cleaned = cleaned.replace(/\.*\s*$/, ''); // Remove trailing dots and spaces
+
+  return cleaned + (firstLink ? " " + firstLink : "");
+}
 const HalPublicationsTable: React.FC = () => {
   const [publications, setPublications] = useState<HalPublication[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -95,6 +106,7 @@ const HalPublicationsTable: React.FC = () => {
             journalTitle: doc.journalTitle_s,
             conferenceTitle: doc.conferenceTitle_s,
             label_bibtex: doc.label_bibtex || "",
+            citationFull: doc.citationFull_s || "",
           })
         );
 
@@ -220,7 +232,8 @@ const HalPublicationsTable: React.FC = () => {
       header: "Cite",
       cell: ({ row }) => {
         const pub = row.original;
-        const citation = formatCitation(pub);
+        const citationFull = pub.citationFull || "";
+        const citation = citationFull === "" ? formatCitation(pub) : cleanHALFullCitation(citationFull);
         const bibtex = pub.label_bibtex || "BibTeX not available.";
 
         const copyBibtex = async () => {
@@ -240,7 +253,7 @@ const HalPublicationsTable: React.FC = () => {
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
                 <DialogTitle>Citation</DialogTitle>
-                <DialogDescription>{citation}</DialogDescription>
+                <DialogDescription className="max-w-[400px] overflow-auto">{citation}</DialogDescription>
               </DialogHeader>
               <div className="my-4">
                 <label className="block mb-2 text-sm font-medium text-gray-700">
