@@ -32,6 +32,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Presentation, BookOpen } from "lucide-react";
+import { Badge } from "@/components/ui/badge"; // New import for Badge
 
 // Updated data model with bibtex field.
 interface HalPublication {
@@ -47,7 +48,6 @@ interface HalPublication {
 
 // Helper function to format a publication in APA style.
 function formatCitation(pub: HalPublication): string {
-  // Format authors as "Author1, Author2, & Author3" (if more than one)
   let authors = "";
   if (pub.authors.length === 1) {
     authors = pub.authors[0];
@@ -55,7 +55,6 @@ function formatCitation(pub: HalPublication): string {
     const last = pub.authors[pub.authors.length - 1];
     authors = pub.authors.slice(0, -1).join(", ") + ", & " + last;
   }
-  // Use journalTitle if available; otherwise conferenceTitle; else URL.
   const source = pub.journalTitle
     ? pub.journalTitle
     : pub.conferenceTitle
@@ -77,7 +76,6 @@ const HalPublicationsTable: React.FC = () => {
   useEffect(() => {
     const fetchPublications = async () => {
       try {
-        // Fetch from our new Astro API endpoint that uses caching
         const response = await fetch("/api/publications.json");
         const data = await response.json();
 
@@ -160,9 +158,8 @@ const HalPublicationsTable: React.FC = () => {
       filterFn: "includesString",
     },
     {
-      // New "Conference/Journal" column with sorting logic
       id: "conference_or_journal",
-      accessorFn: (row) => row.conferenceTitle || row.journalTitle || "N/A", // Ensure sorting works
+      accessorFn: (row) => row.conferenceTitle || row.journalTitle || "N/A",
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -185,34 +182,29 @@ const HalPublicationsTable: React.FC = () => {
       },
     },
     {
-      accessorKey: "authors",
+      // Use accessorFn to join authors for filtering while rendering badges in the cell.
+      id: "authors",
+      accessorFn: (row) => row.authors.join(" "),
       header: "Authors",
       cell: ({ row }) => {
-        const authors = row.getValue("authors") as string[];
+        const authors: string[] = row.original.authors;
         return (
-          <>
-            {authors
-              .map((author, index) =>
-                author === "Ammar Mian" ? (
-                  <span key={index} style={{ fontWeight: "bold" }}>
-                    {author}
-                  </span>
-                ) : (
-                  <span key={index}>{author}</span>
-                )
-              )
-              .reduce(
-                (prev, curr, idx) =>
-                  idx === 0 ? [prev, curr] : [...prev, ", ", curr],
-                [] as React.ReactNode[]
-              )}
-          </>
+          <div className="flex flex-wrap gap-2">
+            {authors.map((author, index) => (
+              <Badge
+                key={index}
+                variant="secondary"
+                className={author === "Ammar Mian" ? "font-bold" : ""}
+              >
+                {author}
+              </Badge>
+            ))}
+          </div>
         );
       },
       filterFn: "includesString",
     },
     {
-      // Map "ART" to "Journal", "COMM" to "Conference", and all others to "Other"
       accessorFn: (row) =>
         row.type === "ART"
           ? "Journal"
@@ -224,7 +216,6 @@ const HalPublicationsTable: React.FC = () => {
       cell: ({ row }) => <div>{row.getValue("type")}</div>,
     },
     {
-      // New "Cite" column with a dialog
       id: "cite",
       header: "Cite",
       cell: ({ row }) => {
@@ -235,7 +226,6 @@ const HalPublicationsTable: React.FC = () => {
         const copyBibtex = async () => {
           try {
             await navigator.clipboard.writeText(bibtex);
-            // Optionally, show a toast/alert indicating success.
             alert("BibTeX copied to clipboard!");
           } catch (err) {
             alert("Failed to copy BibTeX.");
@@ -287,7 +277,6 @@ const HalPublicationsTable: React.FC = () => {
   if (loading) return <div className="text-center text-xl">Loading...</div>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
 
-  // Get current filters for title, authors, and type.
   const titleFilter = (table.getColumn("title")?.getFilterValue() as string) ?? "";
   const authorsFilter = (table.getColumn("authors")?.getFilterValue() as string) ?? "";
   const typeFilter = (table.getColumn("type")?.getFilterValue() as string) ?? "";

@@ -5,7 +5,12 @@ import * as reactTable from "@tanstack/react-table";
 import { User } from "lucide-react";
 import { GraduationCap, FlaskConical } from "lucide-react"; // Import the icons
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -14,6 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 
 // Dummy data for students with new 'subject' and 'keywords' columns
 const studentsData = [
@@ -49,8 +56,9 @@ const studentsData = [
 
 const StudentsTable: React.FC = () => {
   const [typeFilter, setTypeFilter] = useState<string | undefined>(undefined);
+  const [columnFilters, setColumnFilters] = useState<reactTable.ColumnFiltersState>([]);
 
-  // Memoize filtered data to prevent recalculating on each render
+  // Memoize filtered data based on type
   const filteredStudents = useMemo(
     () => studentsData.filter((student) => (typeFilter ? student.type === typeFilter : true)),
     [typeFilter]
@@ -61,18 +69,17 @@ const StudentsTable: React.FC = () => {
       accessorKey: "name",
       header: "Name",
       cell: ({ row }) => {
-         const name = row.getValue<string>("name"); // Type the name as string
-         const type = row.getValue<string>("type");
+        const name = row.getValue<string>("name");
+        const type = row.getValue<string>("type");
 
         return (
           <div className="flex items-center">
-            {/* Conditionally render the appropriate icon based on the type */}
             {type === "Master" ? (
               <GraduationCap className="mr-2 text-blue-600" />
             ) : type === "Ph.D" ? (
               <User className="mr-2 text-green-600" />
             ) : type === "Post-Doc" ? (
-              <FlaskConical className="mr-2 text-orange-600" /> // New Post-doc icon
+              <FlaskConical className="mr-2 text-orange-600" />
             ) : null}
             {name}
           </div>
@@ -90,10 +97,18 @@ const StudentsTable: React.FC = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setTypeFilter(undefined)}>All</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTypeFilter("Master")}>Master</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTypeFilter("Ph.D")}>Ph.D</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTypeFilter("Post-Doc")}>Post-Doc</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTypeFilter(undefined)}>
+                All
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTypeFilter("Master")}>
+                Master
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTypeFilter("Ph.D")}>
+                Ph.D
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTypeFilter("Post-Doc")}>
+                Post-Doc
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -108,55 +123,100 @@ const StudentsTable: React.FC = () => {
     {
       accessorKey: "defended",
       header: "Defended",
-      cell: ({ row }) => {
-        return (
-          <div>
-            {row.getValue("defended") ? new Date(row.getValue("defended")).toLocaleDateString() : ""}
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <div>
+          {row.getValue("defended")
+            ? new Date(row.getValue("defended")).toLocaleDateString()
+            : ""}
+        </div>
+      ),
     },
     {
       accessorKey: "funding",
       header: "Funding",
       cell: ({ row }) => <div>{row.getValue("funding")}</div>,
     },
-    // New subject column
+    // Subject column with filtering enabled
     {
       accessorKey: "subject",
       header: "Subject",
       cell: ({ row }) => <div>{row.getValue("subject")}</div>,
+      filterFn: "includesString",
     },
-    // New keywords column with styling
+    // Keywords column with accessorFn for filtering
     {
-      accessorKey: "keywords",
+      id: "keywords",
+      accessorFn: (row) => row.keywords.join(" "),
       header: "Keywords",
       cell: ({ row }) => (
         <div className="flex flex-wrap gap-2">
-          {row
-            .getValue<string[]>("keywords") // Type the keywords as an array of strings
-            .map((keyword: string, index: number) => (
-              <span
-                key={index}
-                className="bg-gray-300 dark:bg-gray-800 px-2 py-1 text-sm rounded border border-gray-300"
-              >
-                {keyword}
-              </span>
-            ))}
+          {row.original.keywords.map((keyword: string, index: number) => (
+            <Badge key={index} variant="secondary">
+              {keyword}
+            </Badge>
+          ))}
         </div>
       ),
+      filterFn: "includesString",
     },
   ];
 
   const table = reactTable.useReactTable({
     data: filteredStudents,
     columns,
-    state: { columnFilters: [] },
+    state: { columnFilters },
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: reactTable.getCoreRowModel(),
+    getFilteredRowModel: reactTable.getFilteredRowModel(),
   });
+
+  // Retrieve current filter values for subject and keywords
+  const subjectFilter = (table.getColumn("subject")?.getFilterValue() as string) ?? "";
+  const keywordsFilter = (table.getColumn("keywords")?.getFilterValue() as string) ?? "";
 
   return (
     <div className="flex flex-col space-y-8">
+      {/* Search Inputs and Type Filter */}
+      <div className="justify-center flex flex-col gap-4 sm:flex-row sm:items-center">
+        <Input
+          placeholder="Search Subject..."
+          value={subjectFilter}
+          onChange={(e) =>
+            table.getColumn("subject")?.setFilterValue(e.target.value)
+          }
+          className="max-w-sm"
+        />
+        <Input
+          placeholder="Search Keywords..."
+          value={keywordsFilter}
+          onChange={(e) =>
+            table.getColumn("keywords")?.setFilterValue(e.target.value)
+          }
+          className="max-w-sm"
+        />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm">
+              {typeFilter ? typeFilter : "Type"}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setTypeFilter(undefined)}>
+              All
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTypeFilter("Master")}>
+              Master
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTypeFilter("Ph.D")}>
+              Ph.D
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTypeFilter("Post-Doc")}>
+              Post-Doc
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
       {/* Data Table */}
       <div className="rounded-md border">
         <Table>
@@ -167,7 +227,10 @@ const StudentsTable: React.FC = () => {
                   <TableHead key={header.id}>
                     {header.isPlaceholder
                       ? null
-                      : reactTable.flexRender(header.column.columnDef.header, header.getContext())}
+                      : reactTable.flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                   </TableHead>
                 ))}
               </TableRow>
@@ -179,7 +242,10 @@ const StudentsTable: React.FC = () => {
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {reactTable.flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {reactTable.flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
