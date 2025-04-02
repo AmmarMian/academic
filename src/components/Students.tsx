@@ -24,31 +24,31 @@ import { Input } from "@/components/ui/input";
 
 // Dummy data for students with new 'subject' and 'keywords' columns
 const studentsData = [
-  { 
+  {
     name: "Olivier Lerda", startDate: "2021-04-01", funding: "Exail Ingeneer", type: "Ph.D", defended: "2024-12-17",
     subject: "Robust Mutivariate Detection for Mill Cross Sonar", keywords: ["Sonar", "Statistical Hypothesis testing", "Robust statistics"]
   },
-  { 
+  {
     name: "Douba Jafuno", startDate: "2022-06-01", funding: "CIFRE with Géolithe", type: "Ph.D", defended: "",
     subject: "Classification of GPR signals with second-order network", keywords: ["Deep learning", "Second-order", "GPR"]
   },
-  { 
+  {
     name: "Matthieu Verlynde", startDate: "2024-10-01", funding: "ED SIE", type: "Ph.D", defended: "",
     subject: "Frugality of ML models in Remote Sensing", keywords: ["Frugal", "AI", "Remote Sensing"]
   },
-  { 
+  {
     name: "Matthieu Gallet", startDate: "2021-02-01", funding: "Research Grant", type: "Master", defended: "2021-09-01",
     subject: "Robust Inversion of GPR signals", keywords: ["GPR", "Inverse methods"]
   },
-  { 
+  {
     name: "Emma Molière", startDate: "2024-02-01", funding: "Research grant", type: "Master", defended: "2024-09-10",
     subject: "Unrolling Pansharpening Inverse methods", keywords: ["Inverse methods", "Unrolling", "Remote Sensing"]
   },
-  { 
+  {
     name: "Matthieu Verlynde", startDate: "2024-02-12", funding: "Research Grant", type: "Master", defended: "2024-09-15",
     subject: "Efficient implementation of Remote Sening algorithms", keywords: ["Energy measurement", "Remote Sensing"]
   },
-  { 
+  {
     name: "Hugo Brehier", startDate: "2024-11-01", funding: "Research Grant", type: "Post-Doc", defended: "",
     subject: "SPDnet and beyond", keywords: ["SPDnet", "Second-order", "Deep Learning"]
   },
@@ -118,7 +118,11 @@ const StudentsTable: React.FC = () => {
     {
       accessorKey: "startDate",
       header: "Started",
-      cell: ({ row }) => <div>{row.getValue("startDate")}</div>,
+      cell: ({ row }) => <div>{
+        row.getValue("startDate") ?
+          new Date(row.getValue("startDate")).toLocaleDateString()
+          : ""
+      }</div>,
     },
     {
       accessorKey: "defended",
@@ -228,9 +232,9 @@ const StudentsTable: React.FC = () => {
                     {header.isPlaceholder
                       ? null
                       : reactTable.flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                   </TableHead>
                 ))}
               </TableRow>
