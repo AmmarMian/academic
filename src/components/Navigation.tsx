@@ -55,9 +55,8 @@ export default function NavigationMain() {
 
   return (
     <div
-      className={`${
-        isSmallScreen ? "" : "fixed"
-      } top-0 left-0 sm:bg-white dark:sm:bg-black  lg:bg-transparent lg:backdrop-blur-sm md:bg-transparent md:backdrop-blur-sm w-full z-50 h-16 flex items-center px-4 sm:px-6 lg:px-8 flex-col sm:flex-row`}
+      className={`${isSmallScreen ? "" : "fixed"
+        } top-0 left-0 sm:bg-white dark:sm:bg-black   w-full z-50 h-16 flex items-center px-4 sm:px-6 lg:px-8 flex-col sm:flex-row`}
     >
       <div className="text">
         <a href="/">
@@ -119,42 +118,42 @@ export default function NavigationMain() {
                 </div>
               </NavigationMenuContent>
             </NavigationMenuItem>
-            {/* <NavigationMenuItem> */}
-            {/*   <NavigationMenuTrigger className="md:bg-transparent md:backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-sm"> */}
-            {/*     Teaching */}
-            {/*   </NavigationMenuTrigger> */}
-            {/*   <NavigationMenuContent> */}
-            {/*     <div className="min-w-[200px] p-3"> */}
-            {/*       <NavigationMenu> */}
-            {/*         <NavigationMenuList> */}
-            {/*           <NavigationMenuItem> */}
-            {/*             <NavigationMenuLink */}
-            {/*               className={navigationMenuTriggerStyle()} */}
-            {/*               asChild */}
-            {/*             > */}
-            {/*               <a href="/teaching/programming/">Computer Science</a> */}
-            {/*             </NavigationMenuLink> */}
-            {/*           </NavigationMenuItem> */}
-            {/*           <NavigationMenuItem> */}
-            {/*             <NavigationMenuLink */}
-            {/*               className={navigationMenuTriggerStyle()} */}
-            {/*               asChild */}
-            {/*             > */}
-            {/*               <a href="/teaching/machinelearning/">Machine Learning</a> */}
-            {/*             </NavigationMenuLink> */}
-            {/*           </NavigationMenuItem> */}
-            {/*         </NavigationMenuList> */}
-            {/*       </NavigationMenu> */}
-            {/*     </div> */}
-            {/*   </NavigationMenuContent> */}
-            {/* </NavigationMenuItem> */}
+            <NavigationMenuItem>
+              <NavigationMenuTrigger className="md:bg-transparent md:backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-sm">
+                Teaching
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <div className="min-w-[200px] p-3">
+                  <NavigationMenu>
+                    <NavigationMenuList>
+                      {/* <NavigationMenuItem> */}
+                      {/*   <NavigationMenuLink */}
+                      {/*     className={navigationMenuTriggerStyle()} */}
+                      {/*     asChild */}
+                      {/*   > */}
+                      {/*     <a href="/teaching/programming/">Computer Science</a> */}
+                      {/*   </NavigationMenuLink> */}
+                      {/* </NavigationMenuItem> */}
+                      <NavigationMenuItem>
+                        <NavigationMenuLink
+                          className={navigationMenuTriggerStyle()}
+                          asChild
+                        >
+                          <a href="https://ammarmian.github.io/numerical_optimization/">Numerical Optimization</a>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    </NavigationMenuList>
+                  </NavigationMenu>
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
       </div>
 
-    <div className="flex ml-4">
-            <SwitchToggle  />
-    </div>
+      <div className="flex ml-4">
+        <SwitchToggle />
+      </div>
     </div>
   );
 }
